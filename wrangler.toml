@@ -1,0 +1,7 @@
+name = "fyria"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+account_id = "ddd4f5d55750972b679c918316b22fe5"
+
+# RESEND_API_KEY must be added as a secret via Cloudflare dashboard:
+# Workers → fyria → Settings → Variables → Add secret → RESEND_API_KEY
