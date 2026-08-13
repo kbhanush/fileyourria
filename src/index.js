@@ -17,6 +17,9 @@ const LANDING_HTML = `<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>File Your RIA — Expert RIA Registration Consulting</title>
   <meta name="description" content="Get your RIA registered with expert guidance at a fraction of agency prices. Flat-fee, transparent pricing. Free 30-minute consultation.">
+  <!-- Meta Pixel -->
+  <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1038950925386700');fbq('track','PageView');</script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1038950925386700&ev=PageView&noscript=1"/></noscript>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -333,6 +336,9 @@ const QUALIFY_HTML = `<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Get Your Free RIA Registration Checklist — FileYourRIA.com</title>
   <meta name="description" content="Answer 5 quick questions and get a personalized RIA registration checklist sent to your inbox. Free.">
+  <!-- Meta Pixel -->
+  <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1038950925386700');fbq('track','PageView');</script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1038950925386700&ev=PageView&noscript=1"/></noscript>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -763,6 +769,9 @@ const QUALIFY_HTML = `<!DOCTYPE html>
         const data = await res.json();
 
         if (!res.ok) throw new Error(data.error || 'Submission failed');
+
+        // Fire FB Lead event (used as campaign conversion signal in Ads Manager)
+        if (typeof fbq !== 'undefined') fbq('track', 'Lead');
 
         // Show thank-you screen
         showThanks(data.score, email, data.redirect);
