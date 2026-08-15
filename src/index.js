@@ -311,8 +311,8 @@ const LANDING_HTML = `<!DOCTYPE html>
       };
     })(window, "https://app.cal.com/embed/embed.js", "init");
     Cal("init", { origin: "https://cal.com" });
-    Cal("inline", { elementOrSelector: "#my-cal-inline", calLink: "fileyourria/30min", layout: "month_view" });
-    Cal("ui", { theme: "light", hideEventTypeDetails: false, layout: "month_view" });
+    Cal("inline", { elementOrSelector: "#my-cal-inline", calLink: "fileyourria/30min", layout: "week_view" });
+    Cal("ui", { theme: "light", hideEventTypeDetails: false, layout: "week_view" });
   </script>
 
   <script>
