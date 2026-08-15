@@ -829,6 +829,26 @@ const QUALIFY_HTML = `<!DOCTYPE html>
 </html>`;
 
 // ─────────────────────────────────────────────
+// GOOGLE SHEETS WEBHOOK (Apps Script Web App)
+// Appends one row per lead submission to the
+// FileYourRIA Leads sheet in fileyourria@gmail.com
+// ─────────────────────────────────────────────
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbz1GxyPMkTo-uzNIkrtLcR1xOWSADMWSRDkdufOeyGCeOzOG6ixDeFsYU7AZW4JBu_o/exec";
+
+async function appendToSheet(data, score) {
+  try {
+    await fetch(SHEETS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...data, score }),
+    });
+  } catch (err) {
+    // Non-fatal — log but don't block the response
+    console.error("Sheets append failed:", err);
+  }
+}
+
+// ─────────────────────────────────────────────
 // LEAD SCORING
 // ─────────────────────────────────────────────
 function scoreLead(data) {
@@ -1110,10 +1130,12 @@ async function handleSubmit(request, env) {
   }
   const redirect = calUrl;
 
-  // Send both emails — failures are logged but don't block the response
+  // Write lead to Google Sheets and send both emails in parallel.
+  // Failures are logged but don't block the response.
   const emailResults = await Promise.allSettled([
+    appendToSheet(data, score),
     sendEmail(env, {
-      to:      'hello@fileyourria.com',
+      to:      'fileyourria@gmail.com',
       subject: `[${score}] New RIA Lead: ${data.name}`,
       html:    buildNotificationEmail(data, score),
     }),
