@@ -586,8 +586,8 @@ const QUALIFY_HTML = `<!DOCTYPE html>
           <input type="email" id="field-email" class="form-input" placeholder="jane@example.com" required autocomplete="email">
         </div>
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone number <span class="text-gray-400 font-normal">(optional)</span></label>
-          <input type="tel" id="field-phone" class="form-input" placeholder="(512) 555-0100" autocomplete="tel">
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Phone number <span class="text-red-400">*</span> <span class="text-gray-400 font-normal text-xs">— we'll text you the meeting link after booking</span></label>
+          <input type="tel" id="field-phone" class="form-input" placeholder="(512) 555-0100" required autocomplete="tel">
         </div>
         <div id="form-error" class="hidden text-sm text-red-500 pt-1"></div>
         <button type="submit" id="submit-btn"
@@ -748,8 +748,8 @@ const QUALIFY_HTML = `<!DOCTYPE html>
       const errorEl = document.getElementById('form-error');
       errorEl.classList.add('hidden');
 
-      if (!name || !email) {
-        errorEl.textContent = 'Please enter your name and email to continue.';
+      if (!name || !email || !phone) {
+        errorEl.textContent = 'Please enter your name, email, and phone number to continue.';
         errorEl.classList.remove('hidden');
         return;
       }
@@ -1098,8 +1098,17 @@ async function handleSubmit(request, env) {
     return jsonError('Name and email are required', 400);
   }
 
-  const score    = scoreLead(data);
-  const redirect = score !== 'LOW' ? 'https://cal.com/fileyourria/30min' : null;
+  const score = scoreLead(data);
+
+  // Build Cal.com URL with prefilled contact fields so the lead doesn't
+  // have to re-enter their name, email, and phone on the booking page.
+  let calUrl = null;
+  if (score !== 'LOW') {
+    const params = new URLSearchParams({ name: data.name, email: data.email });
+    if (data.phone) params.set('phone', data.phone);
+    calUrl = `https://cal.com/fileyourria/30min?${params.toString()}`;
+  }
+  const redirect = calUrl;
 
   // Send both emails — failures are logged but don't block the response
   const emailResults = await Promise.allSettled([
